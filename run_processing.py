@@ -46,11 +46,8 @@ IDs = ('SIRIUS_2018_05_30_01565',
 
 
 benchmark_ID = IDs[0]
-dir_raw_data = 'RAW-DATA'
 dir_plot = 'PLOTS'
 os.makedirs(dir_plot, exist_ok=True)
-
-
 
 
 for benchmark_ID in IDs:
@@ -64,7 +61,7 @@ for benchmark_ID in IDs:
     I_qz = get_I_qz(data_2D, peaks1D_idx)
 
     plot_peaks_data_1D(benchmark_ID, data_1D, peaks1D_idx, save=True)
-    plot_2D_map(benchmark_ID, data_1D, data_2D, cmap='viridis', save=True)
+    plot_2D_map(benchmark_ID, data_1D, data_2D, cmap='plasma', save=True)
     plot_2D_map(benchmark_ID, data_1D, data_2D, cmap='gray', save=True)
     plot_I_qz_peaks(benchmark_ID, data_1D, I_qz, peaks1D_idx, save=True)
     plot_I_q_norm(benchmark_ID, data_1D, data_2D, save=True)

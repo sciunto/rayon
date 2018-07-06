@@ -8,7 +8,7 @@ from scipy.signal import find_peaks, peak_prominences
 
 benchmark_ID = 'SIRIUS_2018_06_01_01643'
 dir_raw_data = 'RAW-DATA'
-dir_plot = 'PLOTS'
+
 
 def load_data_1D(ID):
     """
@@ -22,6 +22,7 @@ def load_data_1D(ID):
     data = data[:, ::-1]
     return data
 
+
 def load_data_2D(ID):
     """
     Load 1D spectrum from raw data.
@@ -31,7 +32,7 @@ def load_data_2D(ID):
     Column 1: I
     """
     data = np.loadtxt(os.path.join(dir_raw_data, ID + '_1D.mat')).T
-    return data[:, ::-1]
+    return data[::-1, ::-1]
 
 
 def get_peaks_data_1D(data_1D):
