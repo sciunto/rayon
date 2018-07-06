@@ -12,7 +12,7 @@ from .spectrum import channel2qz
 benchmark_ID = 'SIRIUS_2018_06_01_01643'
 dir_raw_data = 'RAW-DATA'
 dir_plot = 'PLOTS'
-dir_processed_data = 'PROC-DATA'
+dir_proc = 'PROC-DATA'
 
 
 def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
@@ -26,6 +26,8 @@ def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
 
     if save:
         figpath = os.path.join(dir_plot, ID + '-peaks-1D.png')
+        datpath = os.path.join(dir_proc, ID + '-peaks-1D.txt')
+
         plt.savefig(figpath)
         plt.close()
 
@@ -45,6 +47,8 @@ def plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=False):
 
     if save:
         figpath = os.path.join(dir_plot, ID + '-I_qz_peaks.png')
+        datpath = os.path.join(dir_proc, ID + '-I_qz_peaks.txt')
+
         plt.savefig(figpath)
         plt.close()
 
@@ -101,5 +105,6 @@ def plot_I_q_norm(ID, data_1D, data_2D, save=False):
 
     if save:
         figpath = os.path.join(dir_plot, ID + '-q_norm.png')
+        datpath = os.path.join(dir_proc, ID + '-q_norm.txt')
         plt.savefig(figpath)
         plt.close()
