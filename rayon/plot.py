@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+from .spectrum import channel2qz
+
 benchmark_ID = 'SIRIUS_2018_06_01_01643'
 dir_raw_data = 'RAW-DATA'
 dir_plot = 'PLOTS'
