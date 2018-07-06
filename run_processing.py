@@ -10,20 +10,37 @@ import numpy as np
 from rayon.plot import *
 from rayon.spectrum import *
 
+
 IDs = ('SIRIUS_2018_05_30_01565',
+       'SIRIUS_2018_05_30_01567',
        'SIRIUS_2018_05_30_01569',
+       'SIRIUS_2018_05_30_01571',
+       'SIRIUS_2018_05_30_01573',
+       'SIRIUS_2018_05_30_01575',
        'SIRIUS_2018_05_30_01579',
        'SIRIUS_2018_05_31_01585',
+       'SIRIUS_2018_05_31_01587',
+#       'SIRIUS_2018_05_31_01591', Missing metadata!
+       'SIRIUS_2018_05_31_01593',
        'SIRIUS_2018_05_31_01595',
+       'SIRIUS_2018_05_31_01597',
        'SIRIUS_2018_05_31_01599',
+       'SIRIUS_2018_05_31_01601',
        'SIRIUS_2018_06_01_01641',
        'SIRIUS_2018_06_01_01643',
        'SIRIUS_2018_06_01_01647',
+       'SIRIUS_2018_06_01_01649',
+       'SIRIUS_2018_06_01_01654',
+#       'SIRIUS_2018_06_01_01656',
+       'SIRIUS_2018_06_01_01663',
        'SIRIUS_2018_06_01_01683',
        'SIRIUS_2018_06_01_01685',
        'SIRIUS_2018_06_01_01687',
        'SIRIUS_2018_06_01_01697',
+       'SIRIUS_2018_06_01_01701',
+       'SIRIUS_2018_06_01_01703',
        'SIRIUS_2018_06_01_01717',
+       'SIRIUS_2018_06_01_01719',
        'SIRIUS_2018_06_01_01721',
        'SIRIUS_2018_06_02_01725',
        'SIRIUS_2018_06_02_01729',
@@ -43,11 +60,7 @@ IDs = ('SIRIUS_2018_05_30_01565',
       )
 
 
-dir_plot = 'PLOTS'
-os.makedirs(dir_plot, exist_ok=True)
-
-
-for ID in IDs:
+def task(ID):
     print(ID)
     # Load data 1D and 2D
     data_1D = load_data_1D(ID)
@@ -64,6 +77,10 @@ for ID in IDs:
     plot_I_q_norm(ID, data_1D, data_2D, save=True)
     plot_3D(data_1D, data_2D, ID, save=True)
 
+dir_plot = 'PLOTS'
+os.makedirs(dir_plot, exist_ok=True)
 
+for ID in IDs:
+    task(ID)
 
 
