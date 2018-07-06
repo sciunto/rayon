@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 import os.path
 import scipy
 import numpy as np
@@ -8,74 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from scipy.signal import find_peaks, peak_prominences
-
 benchmark_ID = 'SIRIUS_2018_06_01_01643'
 dir_raw_data = 'RAW-DATA'
 dir_plot = 'PLOTS'
-
-def load_data_1D(ID):
-    """
-    Load 1D spectrum from raw data.
-    
-    
-    Column 0: qxy
-    Column 1: I
-    """
-    data = np.loadtxt(os.path.join(dir_raw_data, ID + '_1D.dat')).T
-    data = data[:, ::-1]
-    return data
-
-def load_data_2D(ID):
-    """
-    Load 1D spectrum from raw data.
-    
-    
-    Column 0: qxy
-    Column 1: I
-    """
-    data = np.loadtxt(os.path.join(dir_raw_data, ID + '_1D.mat')).T
-    return data[:, ::-1]
-    
-
-def get_peaks_data_1D(data_1D):
-    """
-    Return peak positions on a 1D spectrum.
-    
-    Peaks are marked by their index (ie channel number)
-    
-    """
-    prominence = .05
-    peaks_idx = find_peaks(data_1D[1] / data_1D[1].max(), height=None, threshold=None, distance=None, 
-                           prominence=prominence, width=None, wlen=None, rel_height=0.5)
-    return peaks_idx[0]
-
-
-def channel2qz(channel):
-    """
-    Convert the channels to qz.
-    
-    TOFIX: this supposes that channel # 0 -> 0 radian.
-    """
-    wavelength = 0.155  # nm, see logbook 
-    deg_per_channel = 0.012957  # Let's trust the logbook
-    rad_per_channel = np.deg2rad(deg_per_channel)
-    
-    return 2 * np.pi / wavelength * np.sin(channel * rad_per_channel)  
-
-
-def get_I_qz(data_2D, indices):
-    """
-    Return I(qz) at a given qxy identified by the indices.
-    
-    Return
-    ------
-    (qz, (I_peak1, I_peak2, ...))
-    
-    """
-    intensities = [data_2D[:, idx] for idx in indices]
-    qz = channel2qz(np.arange(len(intensities[0])))
-    return qz, intensities
 
 
 def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
@@ -91,7 +25,7 @@ def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
         plt.savefig(os.path.join(dir_plot, ID + '-peaks-1D.png'))
         plt.close()
 
-        
+
 def plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=False):
 
     plt.figure(figsize=(10, 5))
@@ -104,14 +38,14 @@ def plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=False):
         qz_peak = np.round(qz_peak, 2)
         plt.plot(I_qz[0], intensity, label=qz_peak)
     plt.legend()
-    
+
     if save:
         plt.savefig(os.path.join(dir_plot, ID + '-I_qz_peaks.png'))
         plt.close()
-        
+
 
 def plot_2D_map(ID, data_1D, data_2D, cmap='viridis', save=False):
-    
+
     plt.figure(figsize=(10, 5))
     qz = channel2qz(np.arange(data_2D.shape[0]))
     extent = [data_1D[0][0], data_1D[0][-1], qz.min(), qz.max()]
@@ -120,12 +54,12 @@ def plot_2D_map(ID, data_1D, data_2D, cmap='viridis', save=False):
     plt.xlabel('q_xy')
     plt.ylabel('q_z')
     plt.imshow(data_2D, cmap=cmap, origin='lower', extent=extent)
-    
+
     if save:
         plt.savefig(os.path.join(dir_plot, ID + '-2D-map-' + cmap + '.png'))
         plt.close()
 
-        
+
 def plot_3D(data_1D, data_2D, ID, save=False):
     fig = plt.figure(figsize=(20, 20))
     ax = fig.gca(projection='3d')
@@ -133,17 +67,17 @@ def plot_3D(data_1D, data_2D, ID, save=False):
     X = data_1D[0]
     Y = channel2qz(np.arange(data_2D.shape[0]))
     X, Y = np.meshgrid(X, Y)
-    
+
     ax.plot_surface(X, Y, data_2D)
     ax.set_xlabel('q_xy')
     ax.set_ylabel('q_z')
     ax.set_zlabel('I')
     plt.title(ID)
-    
+
     if save:
         plt.savefig(os.path.join(dir_plot, ID + '-3D.png'))
         plt.close()
-        
+
 
 def plot_I_q_norm(ID, data_1D, data_2D, save=False):
 
@@ -158,11 +92,11 @@ def plot_I_q_norm(ID, data_1D, data_2D, save=False):
     plt.ylabel('I')
     plt.xlabel('sqrt(q_xy^2 + q_z^2)')
     plt.plot(norm.ravel(), data_2D.ravel(), '.')
-    
+
     if save:
         plt.savefig(os.path.join(dir_plot, ID + '-q_norm.png'))
         plt.close()
-        
+
 
 if __name__ == '__main__':
 
