@@ -6,7 +6,6 @@ import numpy as np
 
 from scipy.signal import find_peaks, peak_prominences
 
-benchmark_ID = 'SIRIUS_2018_06_01_01643'
 dir_raw_data = 'RAW-DATA'
 
 
@@ -35,6 +34,34 @@ def load_data_2D(ID):
     return data[::-1, ::-1]
 
 
+def load_metadata(ID):
+    """
+    Load metadata.
+
+    0: delta
+    1: ys
+    2: zs
+    3: xtal2perp
+    4: alphax
+    5: gamma
+    6: xs
+    6: energydcm
+    7: current
+    8: mon2
+    9: surfacepressure
+    10: areapermolecule
+    11: qxy
+    12: mon4
+    13: pilatusroi1
+    14: braggdcm
+    15: integration_time
+    16: sensors_rel_timestamps
+    17: sensorsTimestamps
+    """
+    data = np.loadtxt(os.path.join(dir_raw_data, ID + '.dat'), skiprows=1)
+    return data.T
+
+
 def get_peaks_data_1D(data_1D):
     """
     Return peak positions on a 1D spectrum.
@@ -48,7 +75,7 @@ def get_peaks_data_1D(data_1D):
     return peaks_idx[0]
 
 
-def channel2qz(channel):
+def channel2qz(ID, channel):
     """
     Convert the channels to qz.
 
@@ -58,10 +85,14 @@ def channel2qz(channel):
     deg_per_channel = 0.012957  # Let's trust the logbook
     rad_per_channel = np.deg2rad(deg_per_channel)
 
-    return 2 * np.pi / wavelength * np.sin(channel * rad_per_channel)
+    offset_angle = load_metadata(ID)[5].mean()  # Degree
+    offset_angle = np.deg2rad(offset_angle)
+
+    return 2 * np.pi / wavelength * \
+            np.sin(channel * rad_per_channel + offset_angle)
 
 
-def get_I_qz(data_2D, indices):
+def get_I_qz(ID, data_2D, indices):
     """
     Return I(qz) at a given qxy identified by the indices.
 
@@ -71,7 +102,7 @@ def get_I_qz(data_2D, indices):
 
     """
     intensities = [data_2D[:, idx] for idx in indices]
-    qz = channel2qz(np.arange(len(intensities[0])))
+    qz = channel2qz(ID, np.arange(len(intensities[0])))
     return qz, intensities
 
 

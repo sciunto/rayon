@@ -9,7 +9,6 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from .spectrum import channel2qz
 
-benchmark_ID = 'SIRIUS_2018_06_01_01643'
 dir_raw_data = 'RAW-DATA'
 dir_plot = 'PLOTS'
 dir_proc = 'PROC-DATA'
@@ -56,10 +55,10 @@ def plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=False):
 def plot_2D_map(ID, data_1D, data_2D, cmap='viridis', save=False):
 
     plt.figure(figsize=(10, 5))
-    qz = channel2qz(np.arange(data_2D.shape[0]))
+    qz = channel2qz(ID, np.arange(data_2D.shape[0]))
     extent = [data_1D[0][0], data_1D[0][-1], qz.min(), qz.max()]
 
-    plt.title(benchmark_ID)
+    plt.title(ID)
     plt.xlabel('q_xy')
     plt.ylabel('q_z')
     plt.imshow(data_2D, cmap=cmap, origin='lower', extent=extent)
@@ -75,7 +74,7 @@ def plot_3D(data_1D, data_2D, ID, save=False):
     ax = fig.gca(projection='3d')
 
     X = data_1D[0]
-    Y = channel2qz(np.arange(data_2D.shape[0]))
+    Y = channel2qz(ID, np.arange(data_2D.shape[0]))
     X, Y = np.meshgrid(X, Y)
 
     ax.plot_surface(X, Y, data_2D)
@@ -94,7 +93,7 @@ def plot_I_q_norm(ID, data_1D, data_2D, save=False):
 
     plt.figure(figsize=(10, 5))
     X = data_1D[0]
-    Y = channel2qz(np.arange(data_2D.shape[0]))
+    Y = channel2qz(ID, np.arange(data_2D.shape[0]))
     X, Y = np.meshgrid(X, Y)
 
     norm = np.sqrt(X**2 + Y**2)

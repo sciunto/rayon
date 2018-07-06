@@ -58,7 +58,7 @@ for benchmark_ID in IDs:
     # Detect peaks
     peaks1D_idx = get_peaks_data_1D(data_1D)
     # Get Profiles
-    I_qz = get_I_qz(data_2D, peaks1D_idx)
+    I_qz = get_I_qz(benchmark_ID, data_2D, peaks1D_idx)
 
     plot_peaks_data_1D(benchmark_ID, data_1D, peaks1D_idx, save=True)
     plot_2D_map(benchmark_ID, data_1D, data_2D, cmap='plasma', save=True)
