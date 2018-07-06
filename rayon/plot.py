@@ -12,6 +12,7 @@ from .spectrum import channel2qz
 benchmark_ID = 'SIRIUS_2018_06_01_01643'
 dir_raw_data = 'RAW-DATA'
 dir_plot = 'PLOTS'
+dir_processed_data = 'PROC-DATA'
 
 
 def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
@@ -21,10 +22,11 @@ def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
     plt.ylabel('I / max(I)')
     plt.title(ID)
     for peak_idx in peaks1D_idx:
-        plt.plot(data_1D[0][peak_idx], data_1D[1][peak_idx] / data_1D[1].max(), 'o' )
+        plt.plot(data_1D[0][peak_idx], data_1D[1][peak_idx] / data_1D[1].max(), 'o')
 
     if save:
-        plt.savefig(os.path.join(dir_plot, ID + '-peaks-1D.png'))
+        figpath = os.path.join(dir_plot, ID + '-peaks-1D.png')
+        plt.savefig(figpath)
         plt.close()
 
 
@@ -42,7 +44,8 @@ def plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=False):
     plt.legend()
 
     if save:
-        plt.savefig(os.path.join(dir_plot, ID + '-I_qz_peaks.png'))
+        figpath = os.path.join(dir_plot, ID + '-I_qz_peaks.png')
+        plt.savefig(figpath)
         plt.close()
 
 
@@ -58,7 +61,8 @@ def plot_2D_map(ID, data_1D, data_2D, cmap='viridis', save=False):
     plt.imshow(data_2D, cmap=cmap, origin='lower', extent=extent)
 
     if save:
-        plt.savefig(os.path.join(dir_plot, ID + '-2D-map-' + cmap + '.png'))
+        figpath = os.path.join(dir_plot, ID + '-2D-map-' + cmap + '.png')
+        plt.savefig(figpath)
         plt.close()
 
 
@@ -77,12 +81,12 @@ def plot_3D(data_1D, data_2D, ID, save=False):
     plt.title(ID)
 
     if save:
-        plt.savefig(os.path.join(dir_plot, ID + '-3D.png'))
+        figpath = os.path.join(dir_plot, ID + '-3D.png')
+        plt.savefig(figpath)
         plt.close()
 
 
 def plot_I_q_norm(ID, data_1D, data_2D, save=False):
-
 
     plt.figure(figsize=(10, 5))
     X = data_1D[0]
@@ -96,11 +100,6 @@ def plot_I_q_norm(ID, data_1D, data_2D, save=False):
     plt.plot(norm.ravel(), data_2D.ravel(), '.')
 
     if save:
-        plt.savefig(os.path.join(dir_plot, ID + '-q_norm.png'))
+        figpath = os.path.join(dir_plot, ID + '-q_norm.png')
+        plt.savefig(figpath)
         plt.close()
-
-
-if __name__ == '__main__':
-
-    benchmark_ID = 'SIRIUS_2018_06_01_01643'
-    dir_raw_data = 'RAW-DATA'
