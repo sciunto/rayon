@@ -2,12 +2,11 @@
 
 * Put the raw data in a folder called 'RAW-DATA' but not commited to this repository
 
-Versions:
+To install (in a virtual env) the dependencies:
 
-* numpy
-* scipy
+    $ pip install -r requirements.txt
 
-
+We need one of the latest scipy version for peak detection.
 
 
 # TODO list
