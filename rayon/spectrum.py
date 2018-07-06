@@ -85,11 +85,12 @@ def channel2qz(ID, channel):
     deg_per_channel = 0.012957  # Let's trust the logbook
     rad_per_channel = np.deg2rad(deg_per_channel)
 
+    # Get the offset angle by averaging all the gamma angles.
     offset_angle = load_metadata(ID)[5].mean()  # Degree
     offset_angle = np.deg2rad(offset_angle)
 
     return 2 * np.pi / wavelength * \
-            np.sin(channel * rad_per_channel + offset_angle)
+           np.sin(channel * rad_per_channel + offset_angle)
 
 
 def get_I_qz(ID, data_2D, indices):
@@ -104,5 +105,4 @@ def get_I_qz(ID, data_2D, indices):
     intensities = [data_2D[:, idx] for idx in indices]
     qz = channel2qz(ID, np.arange(len(intensities[0])))
     return qz, intensities
-
 

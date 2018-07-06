@@ -43,29 +43,26 @@ IDs = ('SIRIUS_2018_05_30_01565',
       )
 
 
-
-
-benchmark_ID = IDs[0]
 dir_plot = 'PLOTS'
 os.makedirs(dir_plot, exist_ok=True)
 
 
-for benchmark_ID in IDs:
-    print(benchmark_ID)
+for ID in IDs:
+    print(ID)
     # Load data 1D and 2D
-    data_1D = load_data_1D(benchmark_ID)
-    data_2D = load_data_2D(benchmark_ID)
+    data_1D = load_data_1D(ID)
+    data_2D = load_data_2D(ID)
     # Detect peaks
     peaks1D_idx = get_peaks_data_1D(data_1D)
     # Get Profiles
-    I_qz = get_I_qz(benchmark_ID, data_2D, peaks1D_idx)
+    I_qz = get_I_qz(ID, data_2D, peaks1D_idx)
 
-    plot_peaks_data_1D(benchmark_ID, data_1D, peaks1D_idx, save=True)
-    plot_2D_map(benchmark_ID, data_1D, data_2D, cmap='plasma', save=True)
-    plot_2D_map(benchmark_ID, data_1D, data_2D, cmap='gray', save=True)
-    plot_I_qz_peaks(benchmark_ID, data_1D, I_qz, peaks1D_idx, save=True)
-    plot_I_q_norm(benchmark_ID, data_1D, data_2D, save=True)
-    plot_3D(data_1D, data_2D, benchmark_ID, save=True)
+    plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=True)
+    plot_2D_map(ID, data_1D, data_2D, cmap='plasma', save=True)
+    plot_2D_map(ID, data_1D, data_2D, cmap='gray', save=True)
+    plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=True)
+    plot_I_q_norm(ID, data_1D, data_2D, save=True)
+    plot_3D(data_1D, data_2D, ID, save=True)
 
 
 

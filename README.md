@@ -18,7 +18,7 @@ Run the code:
 
 TODO list
 
-* Convert channel to qz (qz = 2 pi / lambda * cos(theta)), theta obtained from calibration curve -> DONE. Offset needed?
+* Convert channel to qz (qz = 2 pi / lambda * cos(theta)), theta obtained from calibration curve -> DONE
 * Write a tool to plot the 3D version of the Intensity map I(qxy, qz) -> FB: ongoing with mayavi
 * Detect peaks positions in I(qxy) -> DONE by maxima detection. Might need to be refined...
 * Detect peak's width
