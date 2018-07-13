@@ -10,11 +10,12 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from .spectrum import channel2qz
 
-dir_raw_data = 'RAW-DATA'
+dir_raw_data = '../RAW-DATA'
 dir_plot = 'PLOTS'
 dir_proc = 'PROC-DATA'
 
 today = time.strftime("%Y-%m-%d")
+
 
 def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
     plt.figure(figsize=(10, 5))
@@ -28,7 +29,8 @@ def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
     if save:
         figpath = os.path.join(dir_plot, ID + '-peaks-1D.png')
         datpath = os.path.join(dir_proc, ID + '-peaks-1D.txt')
-
+        
+        np.savetxt(datpath,np.column_stack([data_1D[0], data_1D[1]]), fmt='%.5e %.5e')
         plt.savefig(figpath)
         plt.close()
 
@@ -50,6 +52,7 @@ def plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=False):
         figpath = os.path.join(dir_plot, ID + '-I_qz_peaks.png')
         datpath = os.path.join(dir_proc, ID + '-I_qz_peaks.txt')
 
+        np.savetxt(datpath,np.column_stack([I_qz[0], intensity]), fmt='%.5e %.5e')
         plt.savefig(figpath)
         plt.close()
 
