@@ -6,8 +6,7 @@ import numpy as np
 
 from scipy.signal import find_peaks, peak_prominences
 
-dir_raw_data = 'RAW-DATA'
-
+dir_raw_data = '../RAW-DATA'
 
 def load_data_1D(ID):
     """
@@ -80,17 +79,21 @@ def channel2qz(ID, channel):
     Convert the channels to qz.
 
     TOFIX: this supposes that channel # 0 -> 0 radian.
+    Corrected. channel #0 --> position of dodecanol peak
     """
     wavelength = 0.155  # nm, see logbook
     deg_per_channel = 0.012957  # Let's trust the logbook
     rad_per_channel = np.deg2rad(deg_per_channel)
-
+    
     # Get the offset angle by averaging all the gamma angles.
     offset_angle = load_metadata(ID)[5].mean()  # Degree
     offset_angle = np.deg2rad(offset_angle)
 
+    #position of dodecanol peak    
+    channel0 = 635
+
     return 2 * np.pi / wavelength * \
-           np.sin(channel * rad_per_channel + offset_angle)
+           np.sin((channel0-channel[::-1]) * rad_per_channel + offset_angle)
 
 
 def get_I_qz(ID, data_2D, indices):
@@ -105,4 +108,9 @@ def get_I_qz(ID, data_2D, indices):
     intensities = [data_2D[:, idx] for idx in indices]
     qz = channel2qz(ID, np.arange(len(intensities[0])))
     return qz, intensities
+
+
+
+
+
 
