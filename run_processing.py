@@ -7,11 +7,12 @@ import os
 
 import numpy as np
 
-from rayon.plot import *
-from rayon.spectrum import *
+import rayon.plot as rpl
+import rayon.spectrum as rspc
 
 
-IDs = ('SIRIUS_2018_05_30_01565',
+IDs = (
+       'SIRIUS_2018_05_30_01565',
        'SIRIUS_2018_05_30_01567',
        'SIRIUS_2018_05_30_01569',
        'SIRIUS_2018_05_30_01571',
@@ -31,7 +32,7 @@ IDs = ('SIRIUS_2018_05_30_01565',
        'SIRIUS_2018_06_01_01647',
        'SIRIUS_2018_06_01_01649',
        'SIRIUS_2018_06_01_01654',
-#       'SIRIUS_2018_06_01_01656',
+##       'SIRIUS_2018_06_01_01656',
        'SIRIUS_2018_06_01_01663',
        'SIRIUS_2018_06_01_01683',
        'SIRIUS_2018_06_01_01685',
@@ -60,25 +61,34 @@ IDs = ('SIRIUS_2018_05_30_01565',
       )
 
 
+
 def task(ID):
     print(ID)
     # Load data 1D and 2D
-    data_1D = load_data_1D(ID)
-    data_2D = load_data_2D(ID)
+    data_1D = rspc.load_data_1D(ID)
+    data_2D = rspc.load_data_2D(ID)
     # Detect peaks
-    peaks1D_idx = get_peaks_data_1D(data_1D)
-    # Get Profiles
-    I_qz = get_I_qz(ID, data_2D, peaks1D_idx)
+    peaks1D_idx = rspc.get_peaks_data_1D(data_1D)
+ 
+    # Fit peaks detected
+    rspc.fit_peaks_spectrum(ID, data_1D, peaks1D_idx,save=True)
 
-    plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=True)
-    plot_2D_map(ID, data_1D, data_2D, cmap='plasma', save=True)
-    plot_2D_map(ID, data_1D, data_2D, cmap='gray', save=True)
-    plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=True)
-    plot_I_q_norm(ID, data_1D, data_2D, save=True)
-    plot_3D(data_1D, data_2D, ID, save=True)
+    # Get Profiles
+    I_qz = rspc.get_I_qz(ID, data_2D, peaks1D_idx)
+
+    rpl.plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=True)
+    rpl.plot_2D_map(ID, data_1D, data_2D, cmap='plasma', save=True)
+    rpl.plot_2D_map(ID, data_1D, data_2D, cmap='gray', save=True)
+    rpl.plot_I_qz_peaks(ID, data_1D, I_qz, peaks1D_idx, save=True)
+    rpl.plot_I_q_norm(ID, data_1D, data_2D, save=True)
+    rpl.plot_3D(data_1D, data_2D, ID, save=True)
+
 
 dir_plot = 'PLOTS'
 os.makedirs(dir_plot, exist_ok=True)
+dir_proc = 'PROC-DATA'
+os.makedirs(dir_proc, exist_ok=True)
+
 
 for ID in IDs:
     task(ID)

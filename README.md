@@ -1,5 +1,6 @@
 # Setup
 
+
 * Put the raw data in a folder called 'RAW-DATA' but not commited to this repository
 
 To install (in a virtual env) the dependencies:
@@ -12,6 +13,8 @@ We need one of the latest scipy versions for peak detection.
 Run the code:
 
     $ python run_processing.py
+
+
 
 
 
