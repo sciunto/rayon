@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from .spectrum import channel2qz
 
-dir_raw_data = '../RAW-DATA'
+dir_raw_data = 'RAW-DATA'
 dir_plot = 'PLOTS'
 dir_proc = 'PROC-DATA'
 

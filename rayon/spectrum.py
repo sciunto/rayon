@@ -7,7 +7,7 @@ import numpy as np
 from scipy.signal import find_peaks, peak_prominences
 from lmfit import Model
 
-dir_raw_data = '../RAW-DATA'
+dir_raw_data = 'RAW-DATA'
 dir_proc = 'PROC-DATA'
 
 def load_data_1D(ID):
@@ -79,9 +79,7 @@ def get_peaks_data_1D(data_1D):
 def channel2qz(ID, channel):
     """
     Convert the channels to qz.
-
-    TOFIX: this supposes that channel # 0 -> 0 radian.
-    Corrected. channel #0 --> position of dodecanol peak
+    channel #0 radian --> position of dodecanol peak
     """
     wavelength = 0.155  # nm, see logbook
     deg_per_channel = 0.012957  # Let's trust the logbook
@@ -158,7 +156,7 @@ def fit_peaks_spectrum(ID, data_1D,indices, save=False):
 
     Return
     ------
-    position, width and amplitude of the peak     
+    array with position, width and amplitude of the peaks detected     
     """
     list_fitparam = []
     
@@ -172,5 +170,5 @@ def fit_peaks_spectrum(ID, data_1D,indices, save=False):
         datpath = os.path.join(dir_proc, ID + '-peaks-fit.txt')
         np.savetxt(datpath, array_fitparam, fmt='%.3e %.3e %.3e')
 
-    
+    return array_fitparam
     
