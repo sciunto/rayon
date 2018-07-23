@@ -10,6 +10,7 @@ from lmfit import Model
 dir_raw_data = 'RAW-DATA'
 dir_proc = 'PROC-DATA'
 
+
 def load_data_1D(ID):
     """
     Load 1D spectrum from raw data.
@@ -129,12 +130,17 @@ def fit_peak(data_1D, indx0):
     ------
     position, width and amplitude of the peak 
     """
-    x = data_1D[0,indx0-13:indx0+13]   #number of channels=13 to cover the peak range 
-    y = data_1D[1,indx0-13:indx0+13] 
+    interval_inf = indx0-13   #number of channels=13x2 to cover the peak range 
+    if (interval_inf <0 ) : interval_inf = 0
+    interval_sup = indx0+13
+    if (interval_sup > (len(data_1D[0])-1) ) : interval_sup =  len(data_1D[0])-1
+    
+    x = data_1D[0,interval_inf:interval_sup]  
+    y = data_1D[1,interval_inf:interval_sup] 
     cen = data_1D[0,indx0]
-    slope = (data_1D[1,indx0+13]-data_1D[1,indx0-13])/(data_1D[0,indx0+13]-data_1D[0,indx0-13])
-    intercept = data_1D[1,indx0-13]
-    y_to_fit = y - line(x-data_1D[0,indx0-13],slope,intercept)
+    slope = (data_1D[1,interval_sup]-data_1D[1,interval_inf])/(data_1D[0,interval_sup]-data_1D[0,interval_inf])
+    intercept = data_1D[1,interval_inf]
+    y_to_fit = y - line(x-data_1D[0,interval_inf],slope,intercept)
  
     mod = Model(gaussian) + Model(line)
     pars = mod.make_params(amp=10., cen=cen, width=0.05, slope=0., intercept=10.)
@@ -143,7 +149,7 @@ def fit_peak(data_1D, indx0):
 #    print(result.fit_report())
 #    import matplotlib.pyplot as pl    
 #    pl.plot(x,y,'ro')
-#    pl.plot(x, result.best_fit+line(x-data_1D[0,indx0-13],slope,intercept))
+#    pl.plot(x, result.best_fit+line(x-data_1D[0,inter_inf],slope,intercept))
 #    pl.show()
 
     return result.best_values['cen'], abs(result.best_values['width']), result.best_values['amp']
