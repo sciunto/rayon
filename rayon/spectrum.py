@@ -4,7 +4,7 @@
 import os.path
 import numpy as np
 
-from scipy.signal import find_peaks, peak_prominences
+from scipy.signal import find_peaks
 from lmfit import Model
 
 dir_raw_data = 'RAW-DATA'
@@ -85,12 +85,12 @@ def channel2qz(ID, channel):
     wavelength = 0.155  # nm, see logbook
     deg_per_channel = 0.012957  # Let's trust the logbook
     rad_per_channel = np.deg2rad(deg_per_channel)
-    
+
     # Get the offset angle by averaging all the gamma angles.
     offset_angle = load_metadata(ID)[5].mean()  # Degree
     offset_angle = np.deg2rad(offset_angle)
 
-    #position of dodecanol peak    
+    # position of dodecanol peak
     channel0 = 635
 
     return 2 * np.pi / wavelength * \
@@ -125,56 +125,56 @@ def fit_peak(data_1D, indx0):
     """
     Gaussian fit of the peak centered around the index indx0
     obtained from the array get_peaks_data_1D
-    
+
     Return
     ------
-    position, width and amplitude of the peak 
+    position, width and amplitude of the peak
     """
-    interval_inf = indx0-13   #number of channels=13x2 to cover the peak range 
-    if (interval_inf <0 ) : interval_inf = 0
-    interval_sup = indx0+13
-    if (interval_sup > (len(data_1D[0])-1) ) : interval_sup =  len(data_1D[0])-1
-    
-    x = data_1D[0,interval_inf:interval_sup]  
-    y = data_1D[1,interval_inf:interval_sup] 
-    cen = data_1D[0,indx0]
-    slope = (data_1D[1,interval_sup]-data_1D[1,interval_inf])/(data_1D[0,interval_sup]-data_1D[0,interval_inf])
-    intercept = data_1D[1,interval_inf]
-    y_to_fit = y - line(x-data_1D[0,interval_inf],slope,intercept)
- 
+    interval_inf = indx0 - 13  # number of channels=13x2 to cover the peak range
+    if interval_inf < 0:
+        interval_inf = 0
+    interval_sup = indx0 + 13
+    if interval_sup > len(data_1D[0]) - 1:
+        interval_sup = len(data_1D[0]) - 1
+
+    x = data_1D[0, interval_inf:interval_sup]
+    y = data_1D[1, interval_inf:interval_sup]
+    cen = data_1D[0, indx0]
+    slope = (data_1D[1, interval_sup] - data_1D[1, interval_inf]) / (data_1D[0, interval_sup] - data_1D[0, interval_inf])
+    intercept = data_1D[1, interval_inf]
+    y_to_fit = y - line(x - data_1D[0, interval_inf], slope, intercept)
+
     mod = Model(gaussian) + Model(line)
     pars = mod.make_params(amp=10., cen=cen, width=0.05, slope=0., intercept=10.)
     result = mod.fit(y_to_fit, pars, x=x)
-    
+
 #    print(result.fit_report())
-#    import matplotlib.pyplot as pl    
-#    pl.plot(x,y,'ro')
-#    pl.plot(x, result.best_fit+line(x-data_1D[0,inter_inf],slope,intercept))
-#    pl.show()
+#    import matplotlib.pyplot as plt
+#    plt.plot(x,y,'ro')
+#    plt.plot(x, result.best_fit+line(x-data_1D[0,inter_inf],slope,intercept))
+#    plt.show()
 
     return result.best_values['cen'], abs(result.best_values['width']), result.best_values['amp']
-    
 
 
-def fit_peaks_spectrum(ID, data_1D,indices, save=False):
+def fit_peaks_spectrum(ID, data_1D, indices, save=False):
     """
     Fit of all the peaks detected (by their channel indices) in the q_xy diagram
 
     Return
     ------
-    array with position, width and amplitude of the peaks detected     
+    array with position, width and amplitude of the peaks detected
     """
     list_fitparam = []
-    
+
     for indx0 in indices:
         cen, width, amplitude = fit_peak(data_1D, indx0)
-        list_fitparam.append([cen, width, amplitude]) 
-        
-    array_fitparam = np.array(list_fitparam).reshape(len(indices),3)
+        list_fitparam.append([cen, width, amplitude])
+
+    array_fitparam = np.array(list_fitparam).reshape(len(indices), 3)
 
     if save:
         datpath = os.path.join(dir_proc, ID + '-peaks-fit.txt')
         np.savetxt(datpath, array_fitparam, fmt='%.3e %.3e %.3e')
 
     return array_fitparam
-    
