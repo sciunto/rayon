@@ -65,7 +65,6 @@ IDs = (
 
 
 def task(ID):
-    print(ID)
     # Load data 1D and 2D
     data_1D = rspc.load_data_1D(ID)
     data_2D = rspc.load_data_2D(ID)
