@@ -32,7 +32,7 @@ IDs = (
        'SIRIUS_2018_06_01_01647',
        'SIRIUS_2018_06_01_01649',
        'SIRIUS_2018_06_01_01654',
-##       'SIRIUS_2018_06_01_01656',
+#       'SIRIUS_2018_06_01_01656',
        'SIRIUS_2018_06_01_01663',
        'SIRIUS_2018_06_01_01683',
        'SIRIUS_2018_06_01_01685',
@@ -46,7 +46,9 @@ IDs = (
        'SIRIUS_2018_06_02_01725',
        'SIRIUS_2018_06_02_01729',
        'SIRIUS_2018_06_02_01733',
+       'SIRIUS_2018_06_02_01735',
        'SIRIUS_2018_06_02_01737',
+       'SIRIUS_2018_06_02_01739',
        'SIRIUS_2018_06_02_01741',
        'SIRIUS_2018_06_02_01761',
        'SIRIUS_2018_06_02_01773',
@@ -84,13 +86,8 @@ def task(ID):
     rpl.plot_3D(data_1D, data_2D, ID, save=True)
 
 
-dir_plot = 'PLOTS'
-os.makedirs(dir_plot, exist_ok=True)
-dir_proc = 'PROC-DATA'
-os.makedirs(dir_proc, exist_ok=True)
-
-
 for ID in IDs:
     task(ID)
+
 
 

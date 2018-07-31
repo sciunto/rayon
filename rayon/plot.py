@@ -19,7 +19,7 @@ today = time.strftime("%Y-%m-%d")
 
 def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
     plt.figure(figsize=(10, 5))
-    plt.plot(data_1D[0], data_1D[1] / data_1D[1].max())
+    plt.semilogy(data_1D[0], data_1D[1] / data_1D[1].max())
     plt.xlabel('q_xy')
     plt.ylabel('I / max(I)')
     plt.title(ID + '---' + today)
