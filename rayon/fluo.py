@@ -1,6 +1,3 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-
 import time
 import os.path
 import numpy as np
@@ -10,6 +7,7 @@ import matplotlib.pyplot as plt
 dir_proc = 'PROC-DATA'
 dir_raw_data = 'RAW-DATA'
 dir_plot = 'PROC-FLUO'
+
 
 today = time.strftime("%Y-%m-%d")
 
@@ -49,7 +47,6 @@ def peak_ratio_K(data):
     return ratio
     
 
-
 def plot_fluo_spectrum(ID, data, save=False):
     """
     Plot a spectrum of fluorescence with 2048 channels
@@ -83,5 +80,4 @@ def plot_variation_KCl(ID, intensity, time, save=False):
         plt.savefig(figpath)
         plt.close()  
     
-
 
