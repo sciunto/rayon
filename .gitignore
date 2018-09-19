@@ -1,3 +1,10 @@
+# Custom
+*.png
+PROC-DATA/
+RAW-DATA
+RAW-DATA/
+
+#
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
