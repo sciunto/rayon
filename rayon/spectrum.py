@@ -71,7 +71,7 @@ def get_peaks_data_1D(data_1D):
     Peaks are marked by their index (ie channel number)
 
     """
-    prominence = .05
+    prominence = 0.05
     peaks_idx = find_peaks(data_1D[1] / data_1D[1].max(), height=None, threshold=None, distance=None,
                            prominence=prominence, width=None, wlen=None, rel_height=0.5)
     return peaks_idx[0]
@@ -116,6 +116,12 @@ def gaussian(x, amp, cen, width):
     return amp * np.exp(-4*np.log(2)*(x-cen)**2 / width**2)
 
 
+def bigaussian(x, amp1, cen1, width1, amp2, cen2, width2):
+    gauss1 = amp1 * np.exp(-4*np.log(2)*(x-cen1)**2 / width1**2)
+    gauss2 = amp2 * np.exp(-4*np.log(2)*(x-cen2)**2 / width2**2)        
+    return gauss1 + gauss2
+
+
 def line(x, slope, intercept):
     """a line background"""
     return slope*x + intercept
@@ -134,8 +140,8 @@ def fit_peak(data_1D, indx0):
     if interval_inf < 0:
         interval_inf = 0
     interval_sup = indx0 + 13
-    if interval_sup > len(data_1D[0]) - 1:
-        interval_sup = len(data_1D[0]) - 1
+    if interval_sup > len(data_1D[0])-1:
+        interval_sup = len(data_1D[0])-1
 
     x = data_1D[0, interval_inf:interval_sup]
     y = data_1D[1, interval_inf:interval_sup]
@@ -148,11 +154,15 @@ def fit_peak(data_1D, indx0):
     pars = mod.make_params(amp=10., cen=cen, width=0.05, slope=0., intercept=10.)
     result = mod.fit(y_to_fit, pars, x=x)
 
+    print(result.best_values['cen'], abs(result.best_values['width']), result.best_values['amp'])
+
 #    print(result.fit_report())
-#    import matplotlib.pyplot as plt
-#    plt.plot(x,y,'ro')
-#    plt.plot(x, result.best_fit+line(x-data_1D[0,inter_inf],slope,intercept))
-#    plt.show()
+    import matplotlib.pyplot as plt
+    plt.plot(x,y,'ro')
+    plt.plot(x, result.best_fit+line(x-data_1D[0,interval_inf],slope,intercept))
+    plt.xlabel('q_xy')
+    plt.ylabel('I / max(I)')
+    plt.show()
 
     return result.best_values['cen'], abs(result.best_values['width']), result.best_values['amp']
 
@@ -166,7 +176,7 @@ def fit_peaks_spectrum(ID, data_1D, indices, save=False):
     array with position, width and amplitude of the peaks detected
     """
     list_fitparam = []
-
+         
     for indx0 in indices:
         cen, width, amplitude = fit_peak(data_1D, indx0)
         list_fitparam.append([cen, width, amplitude])
@@ -178,3 +188,56 @@ def fit_peaks_spectrum(ID, data_1D, indices, save=False):
         np.savetxt(datpath, array_fitparam, fmt='%.3e %.3e %.3e')
 
     return array_fitparam
+
+
+def fit_2peaks(ID, data_1D, indx1, indx2, save=False):
+    """
+    Gaussian fit of two closed peaks centered around the index1 and indx2  (indx1-indx2 < 15)
+    obtained from the array get_peaks_data_1D
+
+    Return
+    ------
+    position, width and amplitude of the 2 peaks
+    """
+    
+    if indx1 > indx2: 
+        indxmax = indx1
+        indxmin = indx2
+    else:
+        indxmax = indx2
+        indxmin = indx1 
+        
+    interval_inf = indxmin - 13  # number of channels=13x2 to cover the peak range
+    if interval_inf < 0:
+        interval_inf = 0
+    interval_sup = indxmax + 13
+    if interval_sup > len(data_1D[0])-1:
+        interval_sup = len(data_1D[0])-1
+
+    x = data_1D[0, interval_inf:interval_sup]
+    y = data_1D[1, interval_inf:interval_sup]
+    cen1 = data_1D[0, indx1]
+    cen2 = data_1D[0, indx2]   
+    print(cen1, cen2)
+    slope = (data_1D[1, interval_sup] - data_1D[1, interval_inf]) / (data_1D[0, interval_sup] - data_1D[0, interval_inf])
+    intercept = data_1D[1, interval_inf]
+    y_to_fit = y - line(x - data_1D[0, interval_inf], slope, intercept)
+
+    mod = Model(bigaussian)+ Model(line)
+    pars = mod.make_params(amp1=10., cen1=cen1, width1=0.02, amp2=10., cen2=cen2, width2=0.02, slope=0., intercept=10.)
+    result = mod.fit(y_to_fit, pars, x=x)
+
+##    print(result.fit_report())
+    import matplotlib.pyplot as plt
+    plt.plot(x,y,'ro')
+    plt.plot(x, result.best_fit + line(x-data_1D[0,interval_inf],slope,intercept))
+    plt.xlabel('q_xy')
+    plt.ylabel('I / max(I)')
+    plt.show()
+
+    return (result.best_values['cen1'], abs(result.best_values['width1']), result.best_values['amp1'], 
+           result.best_values['cen2'], abs(result.best_values['width2']), result.best_values['amp2'])
+
+
+
+
