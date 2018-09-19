@@ -71,7 +71,7 @@ def get_peaks_data_1D(data_1D):
     Peaks are marked by their index (ie channel number)
 
     """
-    prominence=0.05
+    prominence = 0.05
     peaks_idx = find_peaks(data_1D[1] / data_1D[1].max(), height=None, threshold=None, distance=None,
                            prominence=prominence, width=None, wlen=None, rel_height=0.5)
     return peaks_idx[0]
