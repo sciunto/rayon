@@ -140,8 +140,8 @@ def fit_peak(data_1D, indx0):
     if interval_inf < 0:
         interval_inf = 0
     interval_sup = indx0 + 13
-    if interval_sup > len(data_1D[0])-1:
-        interval_sup = len(data_1D[0])-1
+    if interval_sup > len(data_1D[0]) - 1:
+        interval_sup = len(data_1D[0]) - 1
 
     x = data_1D[0, interval_inf:interval_sup]
     y = data_1D[1, interval_inf:interval_sup]
