@@ -42,6 +42,11 @@ def task(ID):
     fluo.plot_variation_KCl(ID, intensity_K, time_all_spectra, save=True)
 
 
+dir_plot = 'PLOTS'
+os.makedirs(dir_plot, exist_ok=True)
+dir_proc = 'PROC-DATA'
+os.makedirs(dir_proc, exist_ok=True)
+
 for ID in IDs: 
     print(ID)
     task(ID)

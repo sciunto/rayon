@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 dir_proc = 'PROC-DATA'
 dir_raw_data = 'RAW-DATA'
-dir_plot = 'PROC-FLUO'
+dir_plot = 'PLOTS'
 
 
 today = time.strftime("%Y-%m-%d")
