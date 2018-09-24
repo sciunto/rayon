@@ -127,7 +127,7 @@ def line(x, slope, intercept):
     return slope*x + intercept
 
 
-def fit_peak(data_1D, indx0):
+def fit_peak(data_1D, indx0, debug=False):
     """
     Gaussian fit of the peak centered around the index indx0
     obtained from the array get_peaks_data_1D
@@ -157,12 +157,13 @@ def fit_peak(data_1D, indx0):
     print(result.best_values['cen'], abs(result.best_values['width']), result.best_values['amp'])
 
 #    print(result.fit_report())
-    import matplotlib.pyplot as plt
-    plt.plot(x,y,'ro')
-    plt.plot(x, result.best_fit+line(x-data_1D[0,interval_inf],slope,intercept))
-    plt.xlabel('q_xy')
-    plt.ylabel('I / max(I)')
-    plt.show()
+    if debug:
+        import matplotlib.pyplot as plt
+        plt.plot(x,y,'ro')
+        plt.plot(x, result.best_fit+line(x-data_1D[0,interval_inf],slope,intercept))
+        plt.xlabel('q_xy')
+        plt.ylabel('I / max(I)')
+        plt.show()
 
     return result.best_values['cen'], abs(result.best_values['width']), result.best_values['amp']
 
