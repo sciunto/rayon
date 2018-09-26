@@ -21,7 +21,6 @@ def load_data_fluo(ID):
     Column 1: I
     """
     data = np.loadtxt(os.path.join(dir_raw_data, ID + '_fluospectrum04.mat'))
-
     return data
 
 
@@ -36,11 +35,23 @@ def read_time(ID):
     
 def peak_ratio_K(data):
     """
-    Ratio between intensity of K-line of potassium (channel=548) 
-    and the intensity of the elastic peak (E=8keV, channel=1330)
+    Ratio between intensity of K-line of Potassium (channel=548) 
+    and the intensity of the elastic peak (E=8keV, channel=1321)
     """
     try:
-        ratio = data[548] / data[1330]
+        ratio = data[548] / data[1321]
+    except (RuntimeError,ZeroDivisionError):
+        ratio = 0.
+    
+    return ratio
+
+def peak_ratio_Cl(data):
+    """
+    Ratio between intensity of K-line of Chlore (channel=438) 
+    and the intensity of the elastic peak (E=8keV, channel=1321)
+    """
+    try:
+        ratio = data[438] / data[1321]
     except (RuntimeError,ZeroDivisionError):
         ratio = 0.
     
@@ -56,7 +67,7 @@ def plot_fluo_spectrum(ID, data, save=False):
     plt.xlabel('channels')
     plt.ylabel('I')    
     plt.title(ID + '---' + today)
-    
+
     if save:
         figpath = os.path.join(dir_plot, ID + '-fluo.png')
         datpath = os.path.join(dir_proc, ID + '-fluo.txt')
@@ -64,15 +75,17 @@ def plot_fluo_spectrum(ID, data, save=False):
         plt.close()    
 
 
-def plot_variation_KCl(ID, intensity, time, save=False):
+def plot_variation_KCl(ID, intensity_K, intensity_Cl, time, save=False):
     """
     Plot the variation of intensity of K-line of potassium as a function of time 
     """
     plt.figure(figsize=(10, 5))
-    plt.plot(time/60., intensity, 'r.')
+    plt.plot(time/60., intensity_K, 'r.', label='K')
+    plt.plot(time/60., intensity_Cl, 'g.', label='Cl')
     plt.xlabel('t (mn)')
-    plt.ylabel('I (K/I$_0$)')    
+    plt.ylabel('I (I_K/I$_0$)')    
     plt.title(ID + '---' + today) 
+    plt.legend()
     
     if save:
         figpath = os.path.join(dir_plot, ID + '-fluoK.png')
@@ -80,4 +93,3 @@ def plot_variation_KCl(ID, intensity, time, save=False):
         plt.savefig(figpath)
         plt.close()  
     
-
