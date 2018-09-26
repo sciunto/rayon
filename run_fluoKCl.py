@@ -30,17 +30,18 @@ def task(ID):
     data = fluo.load_data_fluo(ID)
     number_of_spectra = data.shape[0]
     time_of_each_spectrum = fluo.read_time(ID)
-
     intensity_K = np.zeros(number_of_spectra)
+    intensity_Cl = np.zeros(number_of_spectra)
     time_all_spectra = np.zeros(number_of_spectra) 
 
     for i in range(number_of_spectra):
         intensity_K[i] = fluo.peak_ratio_K(data[i])
+        intensity_Cl[i] = fluo.peak_ratio_Cl(data[i])
         time_all_spectra[i] = i*time_of_each_spectrum
+
+    fluo.plot_variation_KCl(ID, intensity_K, intensity_Cl, time_all_spectra, save=True)
+
     
-    fluo.plot_variation_KCl(ID, intensity_K, time_all_spectra, save=True)
-
-
 dir_plot = 'PLOTS'
 os.makedirs(dir_plot, exist_ok=True)
 dir_proc = 'PROC-DATA'
