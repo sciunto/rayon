@@ -28,35 +28,35 @@ def read_time(ID):
     """
     To extract the time acquisition of each fluorescence spectrum in the measurement set
     """
-    data = np.loadtxt(os.path.join(dir_raw_data, ID + '.dat'), skiprows=1)    
-    time = data[0,6]    
+    data = np.loadtxt(os.path.join(dir_raw_data, ID + '.dat'), skiprows=1)
+    time = data[0,6]
     return time
 
-    
+
 def peak_ratio_K(data):
     """
-    Ratio between intensity of K-line of Potassium (channel=548) 
+    Ratio between intensity of K-line of Potassium (channel=548)
     and the intensity of the elastic peak (E=8keV, channel=1321)
     """
     try:
         ratio = data[548] / data[1321]
     except (RuntimeError,ZeroDivisionError):
         ratio = 0.
-    
+
     return ratio
 
 def peak_ratio_Cl(data):
     """
-    Ratio between intensity of K-line of Chlore (channel=438) 
+    Ratio between intensity of K-line of Chlore (channel=438)
     and the intensity of the elastic peak (E=8keV, channel=1321)
     """
     try:
         ratio = data[438] / data[1321]
     except (RuntimeError,ZeroDivisionError):
         ratio = 0.
-    
+
     return ratio
-    
+
 
 def plot_fluo_spectrum(ID, data, save=False):
     """
@@ -65,31 +65,32 @@ def plot_fluo_spectrum(ID, data, save=False):
     plt.figure(figsize=(10, 5))
     plt.semilogy(data)
     plt.xlabel('channels')
-    plt.ylabel('I')    
+    plt.ylabel('I')
     plt.title(ID + '---' + today)
 
     if save:
         figpath = os.path.join(dir_plot, ID + '-fluo.png')
         datpath = os.path.join(dir_proc, ID + '-fluo.txt')
         plt.savefig(figpath)
-        plt.close()    
+        plt.close()
 
 
 def plot_variation_KCl(ID, intensity_K, intensity_Cl, time, save=False):
     """
-    Plot the variation of intensity of K-line of potassium as a function of time 
+    Plot the variation of intensity of K-line of potassium as a function of time
     """
-    plt.figure(figsize=(10, 5))
-    plt.plot(time/60., intensity_K, 'r.', label='K')
-    plt.plot(time/60., intensity_Cl, 'g.', label='Cl')
-    plt.xlabel('t (mn)')
-    plt.ylabel('I (I_K/I$_0$)')    
-    plt.title(ID + '---' + today) 
-    plt.legend()
-    
+    fig, axes = plt.subplots(nrows=2)
+    ax = axes.ravel()
+    #plt.figure(figsize=(10, 5))
+    ax[0].plot(time/60., intensity_K, 'r.')
+    ax[1].plot(time/60., intensity_Cl, 'g.')
+    ax[1].set_xlabel('t (mn)')
+    ax[0].set_ylabel('I ($I_K/I_0$)')
+    ax[1].set_ylabel('I ($I_{Cl}/I_0$)')
+    ax[0].set_title(ID + '---' + today)
     if save:
-        figpath = os.path.join(dir_plot, ID + '-fluoK.png')
-        datpath = os.path.join(dir_proc, ID + '-fluoK.txt')
+        figpath = os.path.join(dir_plot, ID + '-fluoKCl.png')
+        datpath = os.path.join(dir_proc, ID + '-fluoKCl.txt')
         plt.savefig(figpath)
-        plt.close()  
-    
+        plt.close()
+
