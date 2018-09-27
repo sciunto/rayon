@@ -29,7 +29,7 @@ def plot_peaks_data_1D(ID, data_1D, peaks1D_idx, save=False):
     if save:
         figpath = os.path.join(dir_plot, ID + '-peaks-1D.png')
         datpath = os.path.join(dir_proc, ID + '-peaks-1D.txt')
-        
+
         np.savetxt(datpath,np.column_stack([data_1D[0], data_1D[1]]), fmt='%.5e %.5e')
         plt.savefig(figpath)
         plt.close()
